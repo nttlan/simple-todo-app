@@ -94,7 +94,7 @@ func createTask(c *gin.Context) {
 		return
 	}
 
-	// create a post
+	// create a task
 	task := Task{
 		Title: body.Title,
 		Status: body.Status,
@@ -152,7 +152,7 @@ func updateSingleTask(c *gin.Context) {
 		return
 	}
 
-	// find and update the post
+	// find and update the task
 	var task Task
 	err = db.First(&task, id).Error
 	if err != nil {
