@@ -29,7 +29,7 @@ func InitDB() *mongo.Client {
 
 	err = client.Ping(context.TODO(), readpref.Primary())
 	if err != nil {
-		panic(err)
+		log.Fatalf("Failed to ping MongoDB: %v", err)
 	}
 
 	log.Println("Pinged your deployment. You successfully connected to MongoDB!")

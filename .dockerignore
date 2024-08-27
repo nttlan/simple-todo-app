@@ -1,0 +1,17 @@
+# Ignore the vendor directory
+vendor/
+
+# Ignore the binary files
+*.exe
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Ignore git files
+.git
+.gitignore
+
+# Ignore other files that are not necessary for the container
+.DS_Store
