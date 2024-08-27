@@ -25,6 +25,7 @@ func main() {
 	router.GET("/tasks", taskController.GetTasks)
 	router.GET("/tasks/:id", taskController.GetTaskById)
 	router.PUT("/tasks/:id", taskController.UpdateTaskById)
+	router.DELETE("/tasks/:id", taskController.DeleteTaskById)
 
 	router.Run(":8080")
 }

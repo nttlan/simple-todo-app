@@ -112,3 +112,27 @@ func (c *TaskController) UpdateTaskById(context *gin.Context) {
 		"updatedTask": task,
 	})
 }
+
+func (c *TaskController) DeleteTaskById(context *gin.Context) {
+	id, err := primitive.ObjectIDFromHex(context.Param("id"))
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"error": "Invalid task ID"})
+		return
+	}
+
+	_, err = c.service.FindById(id)
+	if err != nil {
+		context.JSON(http.StatusNotFound, gin.H{"error": "Task not found"})
+		return
+	}
+
+	_, err = c.service.Delete(id)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	context.JSON(http.StatusOK, gin.H{
+		"message": "Task deleted successfully",
+	})
+}

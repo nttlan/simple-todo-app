@@ -53,3 +53,9 @@ func (c *TaskService) Update(task models.Task) (*mongo.UpdateResult, error) {
 	result, err := c.collection.UpdateOne(context.TODO(), filter, update)
 	return result, err
 }
+
+func (c *TaskService) Delete(id primitive.ObjectID) (*mongo.DeleteResult, error) {
+	filter := bson.D{{Key: "_id", Value: id}}
+	result, err := c.collection.DeleteOne(context.TODO(), filter)
+	return result, err
+}
