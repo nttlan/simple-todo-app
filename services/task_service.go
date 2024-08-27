@@ -27,9 +27,9 @@ func (s *TaskService) FindAll() ([]models.Task, error) {
 	filter := bson.D{}
 
 	cursor, err := s.collection.Find(context.TODO(), filter)
-    if err != nil {
-        return nil, err
-    }
+	if err != nil {
+		return nil, err
+	}
 	defer cursor.Close(context.TODO())
 
 	var results []models.Task
@@ -44,5 +44,12 @@ func (c *TaskService) FindById(id primitive.ObjectID) (models.Task, error) {
 	filter := bson.D{{Key: "_id", Value: id}}
 	var result models.Task
 	err := c.collection.FindOne(context.TODO(), filter).Decode(&result)
+	return result, err
+}
+
+func (c *TaskService) Update(task models.Task) (*mongo.UpdateResult, error) {
+	filter := bson.D{{Key: "_id", Value: task.ID}}
+	update := bson.D{{Key: "$set", Value: task}}
+	result, err := c.collection.UpdateOne(context.TODO(), filter, update)
 	return result, err
 }
