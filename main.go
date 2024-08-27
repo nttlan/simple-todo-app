@@ -23,6 +23,7 @@ func main() {
 
     router.POST("/tasks", taskController.CreateTask)
     router.GET("/tasks", taskController.GetTasks)
+    router.GET("/tasks/:id", taskController.GetTaskById)
 
 	router.Run(":8080")
 }

@@ -2,9 +2,11 @@ package controllers
 
 import (
 	"net/http"
-	"github.com/gin-gonic/gin"
+
 	"github.com/emerald-lan/simple-todo-app/models"
 	"github.com/emerald-lan/simple-todo-app/services"
+	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type TaskController struct {
@@ -32,10 +34,32 @@ func (c* TaskController) CreateTask(context *gin.Context) {
 		return
 	}
 
-	result, err := c.service.CreateOne(task)
+	if task.Title == "" {
+		context.JSON(http.StatusBadRequest, gin.H{"error": "Task title is required"})
+		return
+	}
+
+	task.Completed = false // default
+
+	result, err := c.service.Create(task)
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 	context.JSON(http.StatusCreated, result)
+}
+
+func (c *TaskController) GetTaskById(context *gin.Context) {
+    id, err := primitive.ObjectIDFromHex(context.Param("id"))
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"error": "Invalid task ID"})
+		return
+	}
+	
+	task, err := c.service.FindById(id)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	context.JSON(http.StatusOK, task)
 }

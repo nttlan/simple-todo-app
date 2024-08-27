@@ -5,6 +5,7 @@ import (
 
 	"github.com/emerald-lan/simple-todo-app/models"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -17,7 +18,7 @@ func NewTaskService(db *mongo.Database) *TaskService {
 	return &TaskService{collection}
 }
 
-func (s *TaskService) CreateOne(task models.Task) (*mongo.InsertOneResult, error) {
+func (s *TaskService) Create(task models.Task) (*mongo.InsertOneResult, error) {
 	result, err := s.collection.InsertOne(context.TODO(), task)
 	return result, err
 }
@@ -37,4 +38,11 @@ func (s *TaskService) FindAll() ([]models.Task, error) {
 		return nil, err
 	}
 	return results, nil
+}
+
+func (c *TaskService) FindById(id primitive.ObjectID) (models.Task, error) {
+	filter := bson.D{{Key: "_id", Value: id}}
+	var result models.Task
+	err := c.collection.FindOne(context.TODO(), filter).Decode(&result)
+	return result, err
 }
